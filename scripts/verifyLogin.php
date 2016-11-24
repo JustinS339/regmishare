@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+ob_start();
 $ini_array = parse_ini_file("databaseInfo.ini");
 
 $sqlservername = $ini_array["sqlservername"];
@@ -77,6 +78,9 @@ else{
 
 	if(strcasecmp($username, $usr)==0 && $hashed_password == $db_pw){
 		$loginStatus = 1;
+        setcookie('username', $username, time()+60*60*24*365);
+
+        $_SESSION['login_user']=$username; // Initializing Session
 	} else if($hashed_password != $db_pw){
 		if($username != $usr){
 			//SALT GENERATION
@@ -91,6 +95,9 @@ else{
             $con->query($query);
 
             $loginStatus = 0;
+            setcookie('username', $username, time()+60*60*24*365);
+
+            $_SESSION['login_user']=$username; // Initializing Session         
 		} else{
 			$loginStatus = "Incorrect password!";
 		}

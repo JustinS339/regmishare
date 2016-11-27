@@ -9,7 +9,7 @@
 		header("Location: ".$host."index.php");
 		die();
 	}
-	echo "<h1>" . $_SESSION['login_user'] . "'s "
+	echo "<div style=\"text-transform: uppercase;\"><b> <font size=\"+2\">" . $_SESSION['login_user'] . "'s "
 ?>
 
 <!doctype html>
@@ -23,9 +23,15 @@
 </head>
 
 <body>
-	home page</h1>
-	<button type="button">Upload File</button>
-	<button type="button"><a href="scripts/logout.php">Log Out</a></button>
+	home page</font></b></div>
+
+	<br><button type="button"><a href="scripts/logout.php">Log Out</a></button> <hr><br>
+
+	<form action="scripts/upload.php" method="post" enctype="multipart/form-data">
+	    Select file to upload:
+	    <input type="file" name="fileToUpload" id="fileToUpload">
+	    <input type="submit" value="Upload" name="submit">
+	</form>
 </body>
 
 </html>

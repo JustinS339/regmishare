@@ -8,7 +8,7 @@ $sqlusername = $ini_array["sqlusername"];
 $sqlpassword = $ini_array["sqlpassword"];
 $sqldatabase = $ini_array["sqldatabase"];
 
-$ini = parse_ini_file("scripts/url.ini");
+$ini = parse_ini_file("url.ini");
 $host = $ini["url"];
 
 function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output = false)
@@ -95,8 +95,14 @@ else{
 
             $loginStatus = 0;
 
+            $dir = "../uploads/".$username;  //Create directory for new user's uploads
+            if( is_dir($dir) === false ){
+                mkdir($dir, 0700, true);
+            }
+
             setcookie('username', $username, time()+60*60*24*365);
-            $_SESSION['login_user']=$username; // Initializing Session        
+            $_SESSION['login_user']=$username; // Initializing Session     
+
 		} else{
 			$loginStatus = "Incorrect password!";
 		}

@@ -1,3 +1,16 @@
+<?php
+	$ini_array = parse_ini_file("scripts/url.ini");
+	$host = $ini_array["url"];
+
+	session_start();
+	ob_start();
+
+	if(isset($_SESSION['login_user'])){
+		header("Location: ".$host."home.php");
+		die();
+	}
+?>
+
 <!doctype html>
 
 <html>
@@ -16,7 +29,7 @@
 	<script type="text/javascript" src="scripts/regmishare.js"></script>
 
 	<section class="loginform cf">
-	<form name="login" id="login" onsubmit = "attemptLogin(this);" method="post" accept-charset="utf-8">
+	<form name="login" id="login" onsubmit = "return attemptLogin(this);" method="post" accept-charset="utf-8">
 			<label for="username">Username:</label>
 			<input type="username" name="username" id="username" placeholder="username" required>
 			</br>

@@ -1,11 +1,15 @@
 <?php
-
+session_start();
+ob_start();
 $ini_array = parse_ini_file("databaseInfo.ini");
 
 $sqlservername = $ini_array["sqlservername"];
 $sqlusername = $ini_array["sqlusername"];
 $sqlpassword = $ini_array["sqlpassword"];
 $sqldatabase = $ini_array["sqldatabase"];
+
+$ini = parse_ini_file("scripts/url.ini");
+$host = $ini["url"];
 
 function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output = false)
 {
@@ -49,10 +53,6 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
 $username = $_POST['postusername'];
 $password = filter_var(mysql_escape_string($_POST['postpassword']));
 
-//debug
-//echo json_encode($password);
-//mysql_close($con);
-
 $regex = "/^[\w]{6,16}$/";
 $regexp = "/^[\\x00-\\x7F]{6,16}$/";
 
@@ -76,7 +76,10 @@ else{
     $hashed_password = pbkdf2("sha256", $password, $dbsalt, 1000, 32); 
 
 	if(strcasecmp($username, $usr)==0 && $hashed_password == $db_pw){
-		$loginStatus = 1;
+        $loginStatus = 1;
+        setcookie('username', $username, time()+60*60*24*365);
+        $_SESSION['login_user']=$username; // Initializing Session
+
 	} else if($hashed_password != $db_pw){
 		if($username != $usr){
 			//SALT GENERATION
@@ -91,6 +94,9 @@ else{
             $con->query($query);
 
             $loginStatus = 0;
+
+            setcookie('username', $username, time()+60*60*24*365);
+            $_SESSION['login_user']=$username; // Initializing Session        
 		} else{
 			$loginStatus = "Incorrect password!";
 		}

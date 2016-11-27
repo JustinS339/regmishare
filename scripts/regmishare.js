@@ -1,3 +1,5 @@
+var host = "http://dev.regmi.biz/";
+
 function attemptLogin(){
 
 	var	username = document.login.username.value;
@@ -5,7 +7,7 @@ function attemptLogin(){
 	
 	var uExp = /^[\w]+$/;
 	var pExp = /^[\x00-\x7F]+$/;
-	
+
 	if(username.length < 6 || username.length > 16 || !username.match(uExp)){
 		confirm("Username must be alphanumeric (underscores allowed) and 6 to 16 characters in length");
 		return false;
@@ -26,8 +28,10 @@ function attemptLogin(){
 	  success: function(result){
 
 	      if(result == 1){
+	      		window.location = host + "home.php";
 				confirm("Logged In");
 			} else if(result == 0){
+				window.location = host + "home.php";
 				confirm("New Account Created With Entered Credentials");
 			} else{
 				confirm(result);
@@ -35,4 +39,5 @@ function attemptLogin(){
 	      }
   	})
 
+	return false;
 }

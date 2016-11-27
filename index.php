@@ -1,9 +1,12 @@
 <?php
+	$ini_array = parse_ini_file("scripts/url.ini");
+	$host = $ini_array["url"];
+
 	session_start();
 	ob_start();
 
 	if(isset($_SESSION['login_user'])){
-		header("Location: http://dev.regmi.biz/home.php");
+		header("Location: ".$host."home.php");
 		die();
 	}
 ?>

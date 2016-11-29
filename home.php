@@ -9,7 +9,21 @@
 		header("Location: ".$host."index.php");
 		die();
 	}
-	echo "<div style=\"text-transform: uppercase;\"><b> <font size=\"+2\">" . $_SESSION['login_user'] . "'s "
+
+	echo "<div style=\"text-transform: uppercase;\"><b> <font size=\"+2\">" . $_SESSION['login_user'] . "'s home page</font></b></div><br>";
+	echo "<div> Your files: </div><br>";
+
+	$path = 'uploads/'.$_SESSION['login_user'];
+
+	$files = scandir($path);
+
+	if(count(array_slice($files, 2))==0){
+		echo("No files uploaded yet <br>");
+	}
+
+	foreach (array_slice($files, 2) as $value) {
+	    echo '<a href="uploads/'.$_SESSION['login_user'].'/'.$value.'" download target="_blank">'.$value.'</a><br/>';
+	}
 ?>
 
 <!doctype html>
@@ -23,8 +37,6 @@
 </head>
 
 <body>
-	home page</font></b></div>
-
 	<br><button type="button"><a href="scripts/logout.php">Log Out</a></button> <hr><br>
 
 	<form action="scripts/upload.php" method="post" enctype="multipart/form-data">

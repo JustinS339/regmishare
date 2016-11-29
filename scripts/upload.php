@@ -1,8 +1,8 @@
 <?php
-$ini_array = parse_ini_file("scripts/url.ini");
-$host = $ini_array["url"];
+session_start();
+ob_start();
 
-$target_dir = $host."uploads/".$_SESSION['login_user']."/";
+$target_dir = "../uploads/".$_SESSION['login_user']."/";
 
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
@@ -26,6 +26,8 @@ if ($uploadOk == 0) {
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+        header("Location: ../home.php");
+        die();
     } else {
         echo "Sorry, there was an error uploading your file.";
     }

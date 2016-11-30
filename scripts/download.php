@@ -2,11 +2,9 @@
 session_start();
 ob_start();
 
-$file = "../uploads/".$_SESSION['login_user']."/";
+$file = "../uploads/".$_SESSION['login_user']."/".$_POST['filename'];
 
-echo $file;
-
-/*if (file_exists($file)) {
+if (file_exists($file)) {
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename="'.basename($file).'"');
@@ -16,5 +14,5 @@ echo $file;
     header('Content-Length: ' . filesize($file));
     readfile($file);
     exit;
-}*/
+}
 ?>

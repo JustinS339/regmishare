@@ -26,15 +26,18 @@
 	<script type="text/javascript" src="scripts/regmishare.js"></script>
 
 	<section class="loginform cf">
-	<form name="login" id="login" onsubmit = "return attemptLogin(this);" method="post" accept-charset="utf-8">
+	<form name="login" id="login" onsubmit = "return attemptAccountCreation(this);" method="post" accept-charset="utf-8">
 			<label for="username">Username:</label>
 			<input type="username" name="username" id="username" placeholder="username" required>
 			</br>
 			<label for="password">Password:</label>
 			<input type="password" name="password" id="password" placeholder="password" required>
 			</br>
-			<input type="submit" value="Login" id="btn">		
-			<a href="/registration.php" style="float: right; padding-top: 1.7em;">Need an account?</a>
+			<label for="retypedPassword">Re-type Password:</label>
+			<input type="password" name="retypedPassword" id="retypedPassword" placeholder="password" required>
+			</br>
+			<input type="submit" value="Create Account" id="btn">		
+			<a href="/index.php" style="float: right; padding-top: 1.7em;">Have an account?</a>
 	</form>
 	</section>
 </body>

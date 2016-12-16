@@ -49,15 +49,19 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
 // If bad information is somehow entered, handle it
 $username = $_POST['postusername'];
 $password = filter_var(mysql_escape_string($_POST['postpassword']));
+$password2 = filter_var(mysql_escape_string($_POST['postpassword2']));
 
 $regex = "/^[\w]{6,16}$/";
 $regexp = "/^[\\x00-\\x7F]{6,16}$/";
 
 if(!preg_match($regex, $username)){
-	$loginStatus = "Incorrect Username";
+	$loginStatus = "Username must be alphanumeric (underscores allowed) and 6 to 16 characters in length";
 }
 else if(!preg_match($regexp, $password)){
-	$loginStatus = "Incorrect Password";
+    $loginStatus = "Password must be 6 to 16 characters in length";
+}
+else if($password !== $password2){
+	$loginStatus = "Passwords do not match";
 }
 else{ 
 	$con = new mysqli($sqlservername,$sqlusername,$sqlpassword,$sqldatabase); 
@@ -66,23 +70,33 @@ else{
 	$query = sprintf("SELECT * FROM userInfo WHERE username = '%s';", $username);
 	$result = $con->query($query);
 	$row = $result->fetch_assoc();
-	$usr = $row["username"];
-	$db_pw = $row["pass"];
-    $dbsalt = $row["salt"];
+	$usr = $row["username"]; 
 
-    $hashed_password = pbkdf2("sha256", $password, $dbsalt, 1000, 32); 
+	if(strcasecmp($username, $usr)==0){
+        $loginStatus = "Username already in use";
 
-	if(strcasecmp($username, $usr)==0 && $hashed_password == $db_pw){
+	} 
+    else{
+		//SALT GENERATION
+		$salt = openssl_random_pseudo_bytes (32); 
+        $hexsalt = bin2hex($salt); 
+
+        //HASH PASSWORD
+        $hash = pbkdf2("sha256", $password, $hexsalt, 1000, 32);
+
+        //INSERT PASSWORD HASH AND SALT INTO DATABASE
+        $query = "INSERT INTO userInfo(username,pass,salt) VALUES('".$username."','".$hash."','".$hexsalt."');";
+        $con->query($query);
+
         $loginStatus = 1;
-        setcookie('username', $username, time()+60*60*24*7);
-        $_SESSION['login_user']=$username; // Initializing Session
 
-	} else if($hashed_password != $db_pw){
-		if($username != $usr){
-			$loginStatus = "Incorrect Username";
-		} else{
-			$loginStatus = "Incorrect Password";
-		}
+        $dir = "../uploads/".$username;  //Create directory for new user's uploads
+        if( is_dir($dir) === false ){
+            mkdir($dir, 0777, true);
+        }
+
+        setcookie('username', $username, time()+60*60*24*7);
+        $_SESSION['login_user']=$username; // Initializing Session     
 	}
 	$con->close();
 }

@@ -17,28 +17,39 @@
 	<link rel="stylesheet" href="normalize.css">
 	<link rel="stylesheet" href="style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="/images/favicons/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/images/favicons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-16x16.png">
+	<link rel="manifest" href="/images/favicons/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/images/favicons/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
 </head>
 
 <body>
-	<div id="background">
-		<!--img src="images/bg.jpg" class="stretch" alt="" /-->
-	</div>
 	<script type="text/javascript" src="scripts/regmishare.js"></script>
-
+	<div class="title"></div>
 	<section class="loginform cf">
-	<form name="login" id="login" onsubmit = "return attemptAccountCreation(this);" method="post" accept-charset="utf-8">
-			<label for="username">Username:</label>
-			<input type="username" name="username" id="username" placeholder="username" required>
-			</br>
-			<label for="password">Password:</label>
-			<input type="password" name="password" id="password" placeholder="password" required>
-			</br>
-			<label for="retypedPassword">Re-type Password:</label>
-			<input type="password" name="retypedPassword" id="retypedPassword" placeholder="password" required>
-			</br>
-			<input type="submit" value="Create Account" id="btn">		
-			<a href="/index.php" style="float: right; padding-top: 1.7em;">Have an account?</a>
-	</form>
+		<form name="login" id="login" onsubmit = "return attemptAccountCreation(this);" method="post" accept-charset="utf-8">
+				<input type="username" name="username" id="username" placeholder="username" required>
+				</br>
+				<input type="password" name="password" id="password" placeholder="password" required>
+				</br>
+				<input type="password" name="retypedPassword" id="retypedPassword" placeholder="re-type password" required>
+				</br>
+				<input style="margin-left: 3em;" type="submit" value="Create Account" id="btn">		
+				<a href="/index.php" style="float: right; padding-top: 1.7em;">Have an account?</a>
+		</form>
 	</section>
 </body>
 

@@ -10,7 +10,7 @@ $fileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
 // Check if file already exists
 if (file_exists($target_file)) {
-    echo "Sorry, file already exists.";
+    echo '<script type="text/javascript"> confirm("File with same name already exists");</script>';
     $uploadOk = 0;
 }
 // Check file size
@@ -21,15 +21,16 @@ if (file_exists($target_file)) {
 
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
+    echo '<script type="text/javascript"> confirm("Sorry, your file was not uploaded");';
+    echo 'window.location= "../home.php";</script>';
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
         header("Location: ../home.php");
         die();
     } else {
-        echo "Sorry, there was an error uploading your file.";
+        echo '<script type="text/javascript"> confirm("Sorry, there was an error uploading your file");';
+        echo 'window.location= "../home.php";</script>';
     }
 }
 ?>

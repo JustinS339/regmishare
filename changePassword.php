@@ -64,6 +64,7 @@
 	<section class="loginform cf" style="margin-top: 7em;">
 		<form name="passChange" id="passChange" onsubmit = "return attemptPasswordChange(this);" method="post" accept-charset="utf-8">
 
+				<input type="hidden" name="CSRFToken" id="CSRFToken" value="<?php echo $_SESSION["token"]; ?>">
 				<input type="password" name="password1" id="password1" placeholder="Enter old password" required>
 				</br>
 				<input type="password" name="password2" id="password2" placeholder="Enter new password" required>

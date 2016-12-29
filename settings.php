@@ -62,7 +62,8 @@
 		<a href="changePassword.php" class="nolink"><button type="button" class="regularButton" id="centerButton">Change Password</button></a>
 		<hr>
 		<div style="text-align: center;"><b>WARNING: This action is irreversible and will delete all the files that you have uploaded</b></div><br>
-		<form action="scripts/deleteAccount.php" onsubmit="if(document.getElementById('agree').checked) { return true; } else { alert('Please indicate that you understand the consequences of deleting your account'); return false; }">
+		<form action="scripts/deleteAccount.php" method="post" onsubmit="if(document.getElementById('agree').checked) { return true; } else { alert('Please indicate that you understand the consequences of deleting your account'); return false; }">
+			<input type="hidden" name="CSRFToken" id="CSRFToken" value="<?php echo $_SESSION["token"]; ?>"/>
 			<div id="centerAgree"><input type="checkbox" name="checkbox" value="check" id="agree" />I understand the consequences</div><br><br>
 			<input type="submit" id="centerWarningButton" name="submit" value="Delete Account" style="margin: auto;"/>
 		</form>

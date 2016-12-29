@@ -5,6 +5,14 @@ session_regenerate_id(true);
 $_SESSION['CREATED'] = time();
 $_SESSION['LAST_ACTIVITY'] = time();
 
+if (empty($_SESSION['token'])) {
+    if (function_exists('mcrypt_create_iv')) {
+        $_SESSION['token'] = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+    } else {
+        $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+    }
+}
+
 $ini_array = parse_ini_file("databaseInfo.ini");
 
 $sqlservername = $ini_array["sqlservername"];

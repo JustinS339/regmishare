@@ -70,44 +70,66 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
 // If bad information is somehow entered, handle it
 $password1 = filter_var(mysql_escape_string($_POST['postpassword1']));
 $password2 = filter_var(mysql_escape_string($_POST['postpassword2']));
+$token = filter_var(mysql_escape_string($_POST['posttoken']));
 
-$regexp = "/^[\\x00-\\x7F]{6,16}$/";
+if(!function_exists('hash_equals')) {
+  function hash_equals($str1, $str2) {
+    if(strlen($str1) != strlen($str2)) {
+      return false;
+    } else {
+      $res = $str1 ^ $str2;
+      $ret = 0;
+      for($i = strlen($res) - 1; $i >= 0; $i--) $ret |= ord($res[$i]);
+      return !$ret;
+    }
+  }
+}
+
+if (hash_equals($_SESSION['token'], $token)) {
+         // Proceed to process the form data
+
+    $regexp = "/^[\\x00-\\x7F]{6,16}$/";
     $con = new mysqli($sqlservername,$sqlusername,$sqlpassword,$sqldatabase); 
-    
-//RETRIEVE USER INFO FROM DATABASE
-$query = sprintf("SELECT * FROM userInfo WHERE username = '%s';", $_SESSION['login_user']);
-$result = $con->query($query);
-$row = $result->fetch_assoc();
-$db_pw = $row["pass"];
-$dbsalt = $row["salt"];
+        
+    //RETRIEVE USER INFO FROM DATABASE
+    $query = sprintf("SELECT * FROM userInfo WHERE username = '%s';", $_SESSION['login_user']);
+    $result = $con->query($query);
+    $row = $result->fetch_assoc();
+    $db_pw = $row["pass"];
+    $dbsalt = $row["salt"];
 
-$hashedOldPassword = pbkdf2("sha256", $password1, $dbsalt, 1000, 32); 
+    $hashedOldPassword = pbkdf2("sha256", $password1, $dbsalt, 1000, 32); 
 
-if($hashedOldPassword !== $db_pw){
-    $status = "Old password is incorrect";
+    if($hashedOldPassword !== $db_pw){
+        $status = "Old password is incorrect";
+    }
+    else if($password1 === $password2){
+        $status = "New password is the same as the old password";
+    }
+    else if(!preg_match($regexp, $password2)){
+        $status = "New password must be 6 to 16 characters in length";
+    }
+    else{ 
+        
+    	//NEW SALT GENERATION
+    	$salt = openssl_random_pseudo_bytes (32); 
+        $hexsalt = bin2hex($salt); 
+
+        //HASH NEW PASSWORD
+        $hash = pbkdf2("sha256", $password2, $hexsalt, 1000, 32);
+
+        //INSERT PASSWORD HASH AND SALT INTO DATABASE
+        $query = "UPDATE userInfo SET pass='".$hash."', salt='".$hexsalt."' WHERE username='".$_SESSION['login_user']."'";
+        $con->query($query);
+
+        $status = 1;
+    }
+
+    $con->close();
+} else {
+    // Log this as a warning and keep an eye on these attempts
+    //throw new Exception("Invalid CSRF token.");
+    $status = "Invalid CSRF token";
 }
-else if($password1 === $password2){
-    $status = "New password is the same as the old password";
-}
-else if(!preg_match($regexp, $password2)){
-    $status = "New password must be 6 to 16 characters in length";
-}
-else{ 
-    
-	//NEW SALT GENERATION
-	$salt = openssl_random_pseudo_bytes (32); 
-    $hexsalt = bin2hex($salt); 
-
-    //HASH NEW PASSWORD
-    $hash = pbkdf2("sha256", $password2, $hexsalt, 1000, 32);
-
-    //INSERT PASSWORD HASH AND SALT INTO DATABASE
-    $query = "UPDATE userInfo SET pass='".$hash."', salt='".$hexsalt."' WHERE username='".$_SESSION['login_user']."'";
-    $con->query($query);
-
-    $status = 1;
-}
-
-$con->close();
 echo json_encode($status);
 ?>

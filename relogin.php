@@ -17,7 +17,7 @@
 	<div class="title"></div>
 
 	<section class="loginform cf">
-		<div><span style="text-transform: uppercase;">'.$_COOKIE['username'].'</span>, you have been inactive for '.TIMEOUTTEXT.'. Please enter your password for security purposes.</div><br>
+		<div><span style="text-transform: uppercase;">'.$_COOKIE['username'].'</span>, you have been inactive for over '.TIMEOUTTEXT.'. Please enter your password for security purposes.</div><br>
 		<form name="login" id="login" onsubmit = "return attemptLogin(this);" method="post" accept-charset="utf-8">
 				<input type="hidden" name="username" value="'.$_COOKIE['username'].'"/>
 				<input type="password" name="password" id="password" placeholder="password" required>

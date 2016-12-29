@@ -54,6 +54,7 @@
 	echo '<section style="font-weight: bold; margin-top: 3em;" class="loginform cf">';
 	echo '<form action="scripts/upload.php" method="post" enctype="multipart/form-data">
 		    Select file to upload:
+		    <input type="hidden" name="CSRFToken" value="'.$_SESSION["token"].'">
 		    <input type="file" name="fileToUpload" id="fileToUpload" required>
 		    <input type="submit" value="Upload" name="submit">
 		</form>
@@ -74,10 +75,12 @@
 	    //echo '<a href="uploads/'.$_SESSION['login_user'].'/'.$value.'" download target="_blank">'.$value.'</a><br/>';
 	    echo '<span style= "font-weight: normal;">' .$value.'</span>';
 	    echo '<form enctype="multipart/form-data" action="scripts/download.php" method="post" style="display:inline;">
+	    	<input type="hidden" name="CSRFToken" value="'.$_SESSION["token"].'">
             <input type="hidden" name="filename" value="'.$value.'"/>
             <input type="submit" id="downloadButton" name="download" value="Download" id="hyperlink-style-button"/>
         </form>';
         echo '<form enctype="multipart/form-data" action="scripts/deleteFile.php" method="post" style="display:inline;">
+        	<input type="hidden" name="CSRFToken" value="'.$_SESSION["token"].'">
             <input type="hidden" name="filename" value="'.$value.'"/>
             <input type="submit" id="deleteButton" name="delete" value="Delete" id="hyperlink-style-button"/>
         </form>';

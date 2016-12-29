@@ -88,6 +88,7 @@ function attemptPasswordChange(){
 	var	password1 = document.passChange.password1.value; //Old password
 	var password2 = document.passChange.password2.value; //New password
 	var password3 = document.passChange.password3.value; //Retyped new password
+	var token = document.passChange.CSRFToken.value;
 	
 	var pExp = /^[\x00-\x7F]+$/;
 	
@@ -103,11 +104,12 @@ function attemptPasswordChange(){
 
 	password1 = encodeURIComponent(password1);
 	password2 = encodeURIComponent(password2);
+	token = encodeURIComponent(token);
 
 	$.ajax({
 	  type: "POST",
 	  url: "scripts/passChange.php",
-	  data: 'postpassword1='+password1+'&postpassword2='+password2,
+	  data: 'postpassword1='+password1+'&postpassword2='+password2+'&posttoken='+token,
 	  datatype: "html",
 	  async: false,
 	  success: function(result){

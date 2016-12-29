@@ -1,6 +1,10 @@
 <?php
 session_start();
 ob_start();
+session_regenerate_id(true);
+$_SESSION['CREATED'] = time();
+$_SESSION['LAST_ACTIVITY'] = time();
+
 $ini_array = parse_ini_file("databaseInfo.ini");
 
 $sqlservername = $ini_array["sqlservername"];
@@ -60,9 +64,6 @@ if(!preg_match($regex, $username)){
 else if(!preg_match($regexp, $password)){
     $loginStatus = "Password must be 6 to 16 characters in length";
 }
-else if($password !== $password2){
-	$loginStatus = "Passwords do not match";
-}
 else{ 
 	$con = new mysqli($sqlservername,$sqlusername,$sqlpassword,$sqldatabase); 
 	
@@ -95,7 +96,6 @@ else{
             mkdir($dir, 0777, true);
         }
 
-        setcookie('username', $username, time()+60*60*24*7);
         $_SESSION['login_user']=$username; // Initializing Session     
 	}
 	$con->close();

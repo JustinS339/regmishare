@@ -1,6 +1,10 @@
 <?php
 session_start();
 ob_start();
+session_regenerate_id(true);
+$_SESSION['CREATED'] = time();
+$_SESSION['LAST_ACTIVITY'] = time();
+
 $ini_array = parse_ini_file("databaseInfo.ini");
 
 $sqlservername = $ini_array["sqlservername"];
@@ -74,7 +78,6 @@ else{
 
 	if(strcasecmp($username, $usr)==0 && $hashed_password == $db_pw){
         $loginStatus = 1;
-        setcookie('username', $username, time()+60*60*24*7);
         $_SESSION['login_user']=$username; // Initializing Session
 
 	} else if($hashed_password != $db_pw){

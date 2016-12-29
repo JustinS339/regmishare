@@ -103,12 +103,11 @@ function attemptPasswordChange(){
 
 	password1 = encodeURIComponent(password1);
 	password2 = encodeURIComponent(password2);
-	password3 = encodeURIComponent(password3);
 
 	$.ajax({
 	  type: "POST",
 	  url: "scripts/passChange.php",
-	  data: 'postpassword1='+password1+'&postpassword2='+password2+'&postpassword3='+password3,
+	  data: 'postpassword1='+password1+'&postpassword2='+password2,
 	  datatype: "html",
 	  async: false,
 	  success: function(result){

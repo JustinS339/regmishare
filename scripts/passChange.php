@@ -1,6 +1,27 @@
 <?php
+include_once("constants.php");
 session_start();
 ob_start();
+
+if(!isset($_SESSION['login_user'])){
+    header("Location: ../index.php");
+    die();
+}
+
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > TIMEOUT)) {
+    // last request was more than 30 minutes ago
+    setcookie('username', $_SESSION['login_user'], time()+60*60*24, '/');
+    session_unset();     // unset $_SESSION variable for the run-time 
+    session_destroy();   // destroy session data in storage
+    header("Location: ../relogin.php");
+}
+$_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+
+if (time() - $_SESSION['CREATED'] > 1800) {
+    // session started more than 30 minutes ago
+    session_regenerate_id(true);    // change session ID for the current session and invalidate old session ID
+    $_SESSION['CREATED'] = time();  // update creation time
+}
 $ini_array = parse_ini_file("databaseInfo.ini");
 
 $sqlservername = $ini_array["sqlservername"];
@@ -49,7 +70,6 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
 // If bad information is somehow entered, handle it
 $password1 = filter_var(mysql_escape_string($_POST['postpassword1']));
 $password2 = filter_var(mysql_escape_string($_POST['postpassword2']));
-$password3 = filter_var(mysql_escape_string($_POST['postpassword3']));
 
 $regexp = "/^[\\x00-\\x7F]{6,16}$/";
     $con = new mysqli($sqlservername,$sqlusername,$sqlpassword,$sqldatabase); 
@@ -71,9 +91,6 @@ else if($password1 === $password2){
 }
 else if(!preg_match($regexp, $password2)){
     $status = "New password must be 6 to 16 characters in length";
-}
-else if($password2 !== $password3){
-	$status = "New passwords do not match";
 }
 else{ 
     
